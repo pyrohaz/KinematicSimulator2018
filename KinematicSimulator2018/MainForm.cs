@@ -44,15 +44,10 @@ namespace KinematicSimulator2018
 			gfxtimer.Interval = 10;
 			gfxtimer.Start();
 			
-			nodes.Add(new Vec3(-2,-1,0));
+			nodes.Add(new Vec3(-1,-1,0));
 			nodes.Add(new Vec3(1,-1,0));
 			nodes.Add(new Vec3(1,1,0));
 			nodes.Add(new Vec3(-1,1,0));
-			
-			nodes.Add(new Vec3(-2,-1,0.5));
-			nodes.Add(new Vec3(1,-1,0.5));
-			nodes.Add(new Vec3(1,1,0.5));
-			nodes.Add(new Vec3(-1,1,0.5));
 		}
 		
 		void panel_MouseDown(object Sender, MouseEventArgs e){
@@ -90,8 +85,8 @@ namespace KinematicSimulator2018
 			
 			nodes2.Clear();
 			foreach(Vec3 node in nodes){
-				Vec3 projnode = node.Project(camera.GetPosition(), camera.GetAngle());
-				projnode *= camera.GetPosition().GetZ();
+				Vec3 projnode = node.Project(camera);
+				//projnode *= camera.GetPosition().GetZ();
 				projnode.SetX(projnode.GetX()+panel.Width/2);
 				projnode.SetY(panel.Height-(projnode.GetY()+panel.Height/2));
 				
@@ -101,25 +96,22 @@ namespace KinematicSimulator2018
 			//Render floor
 			Pen linepen = new Pen(Color.Gray);
 			for(int n = 0; n<floor.GetNodes().Count; n+=4){
-				Vec3 n1 = floor.GetNodes()[n].Project(camera.GetPosition(), camera.GetAngle());
-				Vec3 n2 = floor.GetNodes()[n+1].Project(camera.GetPosition(), camera.GetAngle());
+				Vec3 n1 = floor.GetNodes()[n].Project(camera);
+				Vec3 n2 = floor.GetNodes()[n+1].Project(camera);
 				
-				n1 *= camera.GetPosition().GetZ();
 				n1.SetX(n1.GetX()+panel.Width/2);
 				n1.SetY(panel.Height-(n1.GetY()+panel.Height/2));
-				n2 *= camera.GetPosition().GetZ();
 				n2.SetX(n2.GetX()+panel.Width/2);
 				n2.SetY(panel.Height-(n2.GetY()+panel.Height/2));
 				
 				g.DrawLine(linepen, (float)n1.GetX(), (float)n1.GetY(), (float)n2.GetX(), (float)n2.GetY());
 								
-				n1 = floor.GetNodes()[n+2].Project(camera.GetPosition(), camera.GetAngle());
-				n2 = floor.GetNodes()[n+3].Project(camera.GetPosition(), camera.GetAngle());
 				
-				n1 *= camera.GetPosition().GetZ();;
+				n1 = floor.GetNodes()[n+2].Project(camera);
+				n2 = floor.GetNodes()[n+3].Project(camera);
+				
 				n1.SetX(n1.GetX()+panel.Width/2);
 				n1.SetY(panel.Height-(n1.GetY()+panel.Height/2));
-				n2 *= camera.GetPosition().GetZ();;
 				n2.SetX(n2.GetX()+panel.Width/2);
 				n2.SetY(panel.Height-(n2.GetY()+panel.Height/2));
 				
@@ -138,9 +130,6 @@ namespace KinematicSimulator2018
 				
 				g.DrawLine(pen, (float)nodes2[idx1].GetX(), (float)nodes2[idx1].GetY(), (float)nodes2[idx2].GetX(), (float)nodes2[idx2].GetY());
 			}
-			
-			floor.Translate(new Vec3(floorpos,0,0));
-			floorpos += 0.1;
 		}
 	}
 }

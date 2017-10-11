@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Diagnostics;
 
 namespace KinematicSimulator2018
 {
@@ -51,6 +52,10 @@ namespace KinematicSimulator2018
 			return new Vec3(n1.x+m, n1.y+m, n1.z+m);
 		}
 		
+		public static Vec3 operator-(Vec3 n1, Vec3 n2){
+			return new Vec3(n1.x-n2.x, n1.y-n2.y, n1.z-n2.z);
+		}
+		
 		public Vec3 RotX(double angle){
 			return new Vec3(x, y*Math.Cos(angle)-z*Math.Sin(angle), y*Math.Sin(angle)+Math.Cos(angle));
 		}
@@ -67,8 +72,10 @@ namespace KinematicSimulator2018
 			return new Vec3(x-pos.x, y-pos.y, z-pos.z);
 		}
 		
-		public Vec3 Project(Vec3 camera, Vec3 angle){
-			Vec3 projvec = new Vec3(x,y,z).RotZ(angle.z).RotY(angle.y).RotX(angle.x).Translate(camera); 
+		public Vec3 Project(Camera camera){
+			Vec3 projvec = new Vec3(x,y,z).RotZ(camera.GetAngle().z).RotY(camera.GetAngle().y).RotX(camera.GetAngle().x);
+			projvec.x *= camera.GetMaxZoom()-camera.GetPosition().GetZ();
+			projvec.y *= camera.GetMaxZoom()-camera.GetPosition().GetZ();
 			return projvec;
 		}
 		

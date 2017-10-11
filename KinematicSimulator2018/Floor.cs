@@ -33,7 +33,7 @@ namespace KinematicSimulator2018
 		
 		public void Translate(Vec3 Position){
 			for(int n = 0; n<nodes.Count; n++){
-				nodes[n].Translate(Position);
+				nodes[n]=nodes[n].Translate(Position);
 			}
 		}
 		

@@ -95,15 +95,19 @@ namespace KinematicSimulator2018
 				double scroll = ((MouseEventArgs)e).Delta*SystemInformation.MouseWheelScrollLines*0.01;
 				double posnew = position.GetZ()+scroll;
 				if(posnew<0) posnew = 0;
+				if(posnew>100) posnew = maxzoom;
 				position.SetZ(posnew);
-				
-				Debug.WriteLine(posnew);
 			}
+		}
+		
+		public double GetMaxZoom(){
+			return maxzoom;
 		}
 		
 		Vec3 position, angle;
 		Point mouselast;
 		bool camerarotate, cameramove;
+		double maxzoom = 100;
 	}
 }
 
