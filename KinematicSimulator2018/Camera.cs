@@ -35,6 +35,7 @@ namespace KinematicSimulator2018
 			angle = new Vec3(0,0,0);
 			cameramove = false;
 			camerarotate = false;
+			cameraenable = false;
 		}
 		
 		public Camera(Vec3 Position, Vec3 Angle){
@@ -50,6 +51,10 @@ namespace KinematicSimulator2018
 			return angle;
 		}
 		
+		public bool GetEnable(){
+			return cameramove | cameraenable;	
+		}
+		
 		public void SetPosition(Vec3 Position){
 			position = Position;
 		}
@@ -60,17 +65,24 @@ namespace KinematicSimulator2018
 		
 		public void CameraHandler(HandlerTypes type, EventArgs e){
 			if(type == HandlerTypes.KeyDown){
-				camerarotate = ((KeyEventArgs)e).Control;
+				ctrl = ((KeyEventArgs)e).Control;
+				alt = ((KeyEventArgs)e).Alt;
+				if(((KeyEventArgs)e).KeyCode == Keys.Space){
+					position.SetZ(0);
+				}
 			}
 			else if(type == HandlerTypes.KeyUp){
-				camerarotate = ((KeyEventArgs)e).Control;
+				ctrl = false;
+				alt = false;
 			}
 			else if(type == HandlerTypes.MouseDown){
-				cameramove = true;
-				Cursor.Current = Cursors.NoMove2D;
+				cameramove = ctrl;
+				camerarotate = alt;
+				if(cameraenable) Cursor.Current = Cursors.NoMove2D;
 			}
 			else if(type == HandlerTypes.MouseUp){
 				cameramove = false;
+				camerarotate = false;
 				Cursor.Current = Cursors.Default;
 			}
 			else if(type == HandlerTypes.MouseMove){
@@ -80,24 +92,25 @@ namespace KinematicSimulator2018
 				dy = mouselast.Y-((MouseEventArgs)e).Location.Y;
 				
 				if(cameramove){
-					if(camerarotate){
-						angle.SetY(angle.GetY()+dx*0.01);
-					}
-					else{
-						angle.SetX(angle.GetX()-dy*0.01);
-						angle.SetZ(angle.GetZ()+dx*0.01);
-					}
+					angle.SetX(angle.GetX()-dy*0.01);
+					angle.SetZ(angle.GetZ()+dx*0.01);
+				}
+				else if(camerarotate){
+					angle.SetY(angle.GetY()+dx*0.01);
 				}
 				
 				mouselast = ((MouseEventArgs)e).Location;
 			}
 			else if(type == HandlerTypes.MouseWheel){
-				double scroll = ((MouseEventArgs)e).Delta*SystemInformation.MouseWheelScrollLines*0.01;
+				double scroll = ((MouseEventArgs)e).Delta*SystemInformation.MouseWheelScrollLines*0.02;
 				double posnew = position.GetZ()+scroll;
 				if(posnew<0) posnew = 0;
 				if(posnew>100) posnew = maxzoom;
 				position.SetZ(posnew);
 			}
+			
+			//Debug.WriteLine(cameraenable + " " + cameramove + " " + camerarotate);
+			//Debug.WriteLine(ctrl + " " + alt);
 		}
 		
 		public double GetMaxZoom(){
@@ -106,7 +119,8 @@ namespace KinematicSimulator2018
 		
 		Vec3 position, angle;
 		Point mouselast;
-		bool camerarotate, cameramove;
+		bool camerarotate, cameramove, cameraenable;
+		bool ctrl, alt;
 		double maxzoom = 100;
 	}
 }
