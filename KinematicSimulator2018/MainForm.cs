@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace KinematicSimulator2018
@@ -75,7 +76,8 @@ namespace KinematicSimulator2018
 				px = (e.Location.X-panel.Width/2)/(camera.GetMaxZoom()-camera.GetPosition().GetZ());
 				py = (panel.Height/2-e.Location.Y)/(camera.GetMaxZoom()-camera.GetPosition().GetZ());
 				pz = camera.GetPosition().GetZ();
-				nodes.Add(new Vec3(px,py,pz));
+				//nodes.Add((new Vec3(px,py,pz)).Project(camera));
+				nodes.Add((new Vec3(px,py,pz)));
 			}
 		}
 		
@@ -106,14 +108,17 @@ namespace KinematicSimulator2018
 			camera.CameraHandler(HandlerTypes.KeyUp, e);
 		}
 		
+		Font font = new Font("Calibri", 10);
 		void panel_Paint(object Sender, PaintEventArgs e){
 			SolidBrush brush = new SolidBrush(Color.Green);
 			Pen pen = new Pen(Color.Blue);
 			Graphics g = e.Graphics;
 			
+			//Set background colour dependent on viewing angle
 			if(Math.Cos(camera.GetAngle().GetX())>0) g.Clear(Color.WhiteSmoke);
 			else g.Clear(Color.LightGray);
 			
+			//Project 3d nodes to 2d plane
 			projectednodes.Clear();
 			foreach(Vec3 node in nodes){
 				Vec3 projnode = node.Project(camera);
@@ -147,6 +152,7 @@ namespace KinematicSimulator2018
 				g.DrawLine(linepen, (float)n1.GetX(), (float)n1.GetY(), (float)n2.GetX(), (float)n2.GetY());
 			}
 			
+			//Render nodes
 			for(int n = 0; n<projectednodes.Count; n++){
 				if(nodeselindex == n) brush.Color = Color.Green;
 				else brush.Color = Color.Red;
@@ -154,6 +160,7 @@ namespace KinematicSimulator2018
 				g.FillEllipse(brush, (float)projectednodes[n].GetX()-3, (float)projectednodes[n].GetY()-3, 6, 6);
 			}
 			
+			//Draw lines between nodes
 			if(projectednodes.Count>0){
 				for(int n = 0; n<projectednodes.Count+1; n++){
 					int idx1 = (n%projectednodes.Count);
@@ -164,6 +171,40 @@ namespace KinematicSimulator2018
 					g.DrawLine(pen, (float)projectednodes[idx1].GetX(), (float)projectednodes[idx1].GetY(), (float)projectednodes[idx2].GetX(), (float)projectednodes[idx2].GetY());
 				}
 			}
+			
+			//Draw axis thing
+			Vec3 ax1 = new Vec3(0,0,0);
+			Vec3 ax2 = new Vec3(1,0,0);
+			Vec3 ax3 = new Vec3(0,1,0);
+			Vec3 ax4 = new Vec3(0,0,1);
+			ax1 = ax1.ProjectZoom(camera, 30);
+			ax2 = ax2.ProjectZoom(camera, 30);
+			ax3 = ax3.ProjectZoom(camera, 30);
+			ax4 = ax4.ProjectZoom(camera, 30);
+			
+			ax1.SetX(ax1.GetX()+30);
+			ax1.SetY((30-ax1.GetY()));
+			ax2.SetX(ax2.GetX()+30);
+			ax2.SetY((30-ax2.GetY()));
+			ax3.SetX(ax3.GetX()+30);
+			ax3.SetY((30-ax3.GetY()));
+			ax4.SetX(ax4.GetX()+30);
+			ax4.SetY((30-ax4.GetY()));
+			
+			pen.Width = 2;
+			pen.Color = Color.Red;
+			g.DrawLine(pen, (float)ax1.GetX(), (float)ax1.GetY(), (float)ax2.GetX(), (float)ax2.GetY());
+			pen.Color = Color.Green;
+			g.DrawLine(pen, (float)ax1.GetX(), (float)ax1.GetY(), (float)ax3.GetX(), (float)ax3.GetY());
+			pen.Color = Color.Blue;
+			g.DrawLine(pen, (float)ax1.GetX(), (float)ax1.GetY(), (float)ax4.GetX(), (float)ax4.GetY());
+			
+			brush.Color = Color.Red;
+			g.DrawString("X", font, brush, (float)ax2.GetX(), (float)ax2.GetY());
+			brush.Color = Color.Green;
+			g.DrawString("Y", font, brush, (float)ax3.GetX(), (float)ax3.GetY());
+			brush.Color = Color.Blue;
+			g.DrawString("Z", font, brush, (float)ax4.GetX(), (float)ax4.GetY());
 		}
 		
 		void Button_setnodeClick(object sender, EventArgs e)
@@ -179,7 +220,6 @@ namespace KinematicSimulator2018
 				if(double.TryParse(textBox_z.Text, out val)){
 					nodes[nodeselindex].SetZ(val);
 				}
-				Debug.WriteLine(nodes[nodeselindex]);
 				panel.Invalidate();
 			}
 		}

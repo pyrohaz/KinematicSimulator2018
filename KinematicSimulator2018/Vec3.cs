@@ -79,6 +79,13 @@ namespace KinematicSimulator2018
 			return projvec;
 		}
 		
+		public Vec3 ProjectZoom(Camera camera, double zoom){
+			Vec3 projvec = new Vec3(x,y,z).RotZ(camera.GetAngle().z).RotY(camera.GetAngle().y).RotX(camera.GetAngle().x);
+			projvec.x *= zoom;
+			projvec.y *= zoom;
+			return projvec;
+		}
+		
 		double x, y, z;
 	}
 }
