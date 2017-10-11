@@ -47,6 +47,9 @@ namespace KinematicSimulator2018
 			this.textBox_z = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.button_setnode = new System.Windows.Forms.Button();
+			this.checkBox_grid = new System.Windows.Forms.CheckBox();
+			this.textBox_gridspacing = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// panel
@@ -78,7 +81,7 @@ namespace KinematicSimulator2018
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(659, 108);
+			this.label1.Location = new System.Drawing.Point(659, 144);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 23);
 			this.label1.TabIndex = 4;
@@ -86,7 +89,7 @@ namespace KinematicSimulator2018
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(659, 131);
+			this.label2.Location = new System.Drawing.Point(659, 167);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(18, 23);
 			this.label2.TabIndex = 5;
@@ -94,21 +97,21 @@ namespace KinematicSimulator2018
 			// 
 			// textBox_x
 			// 
-			this.textBox_x.Location = new System.Drawing.Point(686, 128);
+			this.textBox_x.Location = new System.Drawing.Point(686, 164);
 			this.textBox_x.Name = "textBox_x";
 			this.textBox_x.Size = new System.Drawing.Size(73, 20);
 			this.textBox_x.TabIndex = 6;
 			// 
 			// textBox_y
 			// 
-			this.textBox_y.Location = new System.Drawing.Point(686, 154);
+			this.textBox_y.Location = new System.Drawing.Point(686, 190);
 			this.textBox_y.Name = "textBox_y";
 			this.textBox_y.Size = new System.Drawing.Size(73, 20);
 			this.textBox_y.TabIndex = 8;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(659, 157);
+			this.label3.Location = new System.Drawing.Point(659, 193);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(18, 23);
 			this.label3.TabIndex = 7;
@@ -116,14 +119,14 @@ namespace KinematicSimulator2018
 			// 
 			// textBox_z
 			// 
-			this.textBox_z.Location = new System.Drawing.Point(686, 180);
+			this.textBox_z.Location = new System.Drawing.Point(686, 216);
 			this.textBox_z.Name = "textBox_z";
 			this.textBox_z.Size = new System.Drawing.Size(73, 20);
 			this.textBox_z.TabIndex = 10;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(659, 183);
+			this.label4.Location = new System.Drawing.Point(659, 219);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(18, 23);
 			this.label4.TabIndex = 9;
@@ -131,7 +134,7 @@ namespace KinematicSimulator2018
 			// 
 			// button_setnode
 			// 
-			this.button_setnode.Location = new System.Drawing.Point(658, 209);
+			this.button_setnode.Location = new System.Drawing.Point(658, 245);
 			this.button_setnode.Name = "button_setnode";
 			this.button_setnode.Size = new System.Drawing.Size(75, 23);
 			this.button_setnode.TabIndex = 11;
@@ -139,11 +142,43 @@ namespace KinematicSimulator2018
 			this.button_setnode.UseVisualStyleBackColor = true;
 			this.button_setnode.Click += new System.EventHandler(this.Button_setnodeClick);
 			// 
+			// checkBox_grid
+			// 
+			this.checkBox_grid.Checked = true;
+			this.checkBox_grid.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_grid.Location = new System.Drawing.Point(659, 73);
+			this.checkBox_grid.Name = "checkBox_grid";
+			this.checkBox_grid.Size = new System.Drawing.Size(104, 24);
+			this.checkBox_grid.TabIndex = 12;
+			this.checkBox_grid.Text = "Grid";
+			this.checkBox_grid.UseVisualStyleBackColor = true;
+			this.checkBox_grid.CheckedChanged += new System.EventHandler(this.CheckBox_gridCheckedChanged);
+			// 
+			// textBox_gridspacing
+			// 
+			this.textBox_gridspacing.Location = new System.Drawing.Point(716, 97);
+			this.textBox_gridspacing.Name = "textBox_gridspacing";
+			this.textBox_gridspacing.Size = new System.Drawing.Size(73, 20);
+			this.textBox_gridspacing.TabIndex = 14;
+			this.textBox_gridspacing.Text = "1";
+			this.textBox_gridspacing.TextChanged += new System.EventHandler(this.TextBox_gridspacingTextChanged);
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(659, 100);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(51, 23);
+			this.label5.TabIndex = 13;
+			this.label5.Text = "Spacing";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(769, 505);
+			this.ClientSize = new System.Drawing.Size(836, 505);
+			this.Controls.Add(this.textBox_gridspacing);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.checkBox_grid);
 			this.Controls.Add(this.button_setnode);
 			this.Controls.Add(this.textBox_z);
 			this.Controls.Add(this.label4);
@@ -161,6 +196,9 @@ namespace KinematicSimulator2018
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.TextBox textBox_gridspacing;
+		private System.Windows.Forms.CheckBox checkBox_grid;
 		private System.Windows.Forms.Button button_setnode;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textBox_z;

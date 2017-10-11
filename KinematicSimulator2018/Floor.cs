@@ -17,9 +17,9 @@ namespace KinematicSimulator2018
 			
 		}
 		
-		public Floor(int Start, int End, int Spacing)
+		public Floor(double Start, double End, double Spacing)
 		{
-			for(int n = Start; n<=End; n+=Spacing){
+			for(double n = Start; n<=End; n+=Spacing){
 				nodes.Add(new Vec3(n, Start, 0));
 				nodes.Add(new Vec3(n, End, 0));
 				nodes.Add(new Vec3(Start, n, 0));

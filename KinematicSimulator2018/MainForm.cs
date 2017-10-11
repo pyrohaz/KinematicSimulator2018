@@ -21,8 +21,8 @@ namespace KinematicSimulator2018
 		List<Vec3> nodes = new List<Vec3>();
 		List<Vec3> projectednodes = new List<Vec3>();
 		int nodeselindex = -1;
-		Camera camera = new Camera(new Vec3(0,0,0), new Vec3(-Math.PI/4, 0, Math.PI/4));
-		Floor floor = new Floor(-100, 100, 2);
+		Camera camera = new Camera(new Vec3(0,0,0), new Vec3(-Math.PI/3, 0, Math.PI/4));
+		Floor floor = new Floor(-50, 50, 1);
 		
 		public MainForm()
 		{
@@ -129,27 +129,29 @@ namespace KinematicSimulator2018
 			}
 			
 			//Render floor
-			Pen linepen = new Pen(Color.Gray);
-			for(int n = 0; n<floor.GetNodes().Count; n+=4){
-				Vec3 n1 = floor.GetNodes()[n].Project(camera);
-				Vec3 n2 = floor.GetNodes()[n+1].Project(camera);
-				
-				n1.SetX(n1.GetX()+panel.Width/2);
-				n1.SetY(panel.Height-(n1.GetY()+panel.Height/2));
-				n2.SetX(n2.GetX()+panel.Width/2);
-				n2.SetY(panel.Height-(n2.GetY()+panel.Height/2));
-				
-				g.DrawLine(linepen, (float)n1.GetX(), (float)n1.GetY(), (float)n2.GetX(), (float)n2.GetY());
-				
-				n1 = floor.GetNodes()[n+2].Project(camera);
-				n2 = floor.GetNodes()[n+3].Project(camera);
-				
-				n1.SetX(n1.GetX()+panel.Width/2);
-				n1.SetY(panel.Height-(n1.GetY()+panel.Height/2));
-				n2.SetX(n2.GetX()+panel.Width/2);
-				n2.SetY(panel.Height-(n2.GetY()+panel.Height/2));
-				
-				g.DrawLine(linepen, (float)n1.GetX(), (float)n1.GetY(), (float)n2.GetX(), (float)n2.GetY());
+			if(checkBox_grid.Checked){
+				Pen linepen = new Pen(Color.Gray);
+				for(int n = 0; n<floor.GetNodes().Count; n+=4){
+					Vec3 n1 = floor.GetNodes()[n].Project(camera);
+					Vec3 n2 = floor.GetNodes()[n+1].Project(camera);
+					
+					n1.SetX(n1.GetX()+panel.Width/2);
+					n1.SetY(panel.Height-(n1.GetY()+panel.Height/2));
+					n2.SetX(n2.GetX()+panel.Width/2);
+					n2.SetY(panel.Height-(n2.GetY()+panel.Height/2));
+					
+					g.DrawLine(linepen, (float)n1.GetX(), (float)n1.GetY(), (float)n2.GetX(), (float)n2.GetY());
+					
+					n1 = floor.GetNodes()[n+2].Project(camera);
+					n2 = floor.GetNodes()[n+3].Project(camera);
+					
+					n1.SetX(n1.GetX()+panel.Width/2);
+					n1.SetY(panel.Height-(n1.GetY()+panel.Height/2));
+					n2.SetX(n2.GetX()+panel.Width/2);
+					n2.SetY(panel.Height-(n2.GetY()+panel.Height/2));
+					
+					g.DrawLine(linepen, (float)n1.GetX(), (float)n1.GetY(), (float)n2.GetX(), (float)n2.GetY());
+				}
 			}
 			
 			//Render nodes
@@ -230,6 +232,22 @@ namespace KinematicSimulator2018
 				nodes.RemoveAt(nodeselindex);
 				panel.Invalidate();
 				nodeselindex = -1;
+			}
+		}
+		
+		void CheckBox_gridCheckedChanged(object sender, EventArgs e)
+		{
+			panel.Invalidate();
+		}
+		
+		void TextBox_gridspacingTextChanged(object sender, EventArgs e)
+		{
+			double num;
+			if(double.TryParse(textBox_gridspacing.Text, out num)){
+				if(num>0){
+					floor = new Floor(-100, 100, num);
+					panel.Invalidate();
+				}
 			}
 		}
 	}
