@@ -36,12 +36,27 @@ namespace KinematicSimulator2018
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.panel = new System.Windows.Forms.Panel();
+			this.SuspendLayout();
+			// 
+			// panel
+			// 
+			this.panel.BackColor = System.Drawing.Color.White;
+			this.panel.Location = new System.Drawing.Point(12, 12);
+			this.panel.Name = "panel";
+			this.panel.Size = new System.Drawing.Size(640, 480);
+			this.panel.TabIndex = 1;
 			// 
 			// MainForm
 			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Text = "KinematicSimulator2018";
+			this.ClientSize = new System.Drawing.Size(664, 505);
+			this.Controls.Add(this.panel);
 			this.Name = "MainForm";
+			this.Text = "KinematicSimulator2018";
+			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Panel panel;
 	}
 }
